@@ -58,7 +58,7 @@ export default function Dashboard() {
               ref={provided.innerRef}
               {...provided.droppableProps}
               display="grid"
-              gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+              gridTemplateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
               gap={4}
               minHeight= "auto"
             >
@@ -69,7 +69,7 @@ export default function Dashboard() {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      background={snapshot.isDragging ? "lightblue" : "lightgray"}
+                      background={snapshot.isDragging ? "lightblue" : "transparent"}
                       marginBottom="8px"
                       borderRadius="4px"
                       boxShadow={snapshot.isDragging ? "0 4px 12px rgba(0, 0, 0, 0.2)" : "none"}
