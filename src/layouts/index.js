@@ -69,7 +69,7 @@ export default function Dashboard() {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      background={snapshot.isDragging ? "lightblue" : "transparent"}
+                      background={snapshot.isDragging ? "lightblue" : "lightgray"}
                       marginBottom="8px"
                       borderRadius="4px"
                       boxShadow={snapshot.isDragging ? "0 4px 12px rgba(0, 0, 0, 0.2)" : "none"}
