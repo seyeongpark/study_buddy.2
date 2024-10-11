@@ -6,6 +6,7 @@ import { Stack, Text,
 import LinkList from '../components/LinkList';
 import DateCounter from '../components/DateCounter';
 import Goals from '../components/Goals';
+import Note from '../components/Note';
 
 export default function Dashboard (props) {
 
@@ -33,32 +34,37 @@ export default function Dashboard (props) {
   }
 
   return (
-    <Box margin='40px'>
-      <Box>
-        <Stack marginBottom='20px'>
-          <Text fontSize='4xl'>{currentTime}</Text>
-        </Stack>
-      </Box>
-      <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-        <Box gridRow="span 3">
-          <Card>
-            <LinkList/>
-          </Card>
-        </Box>
-        <Box>
-          <Card>
-            <DateCounter/>
-          </Card>
-        </Box>
-        <Box>
-          <Card>
-            <Goals/>
-          </Card>
-        </Box>
-        {/* <Box bg='green'>
-        Component4 (wish)
-        </Box> */}
-      </Grid>
+  <Box margin='40px'>
+    <Box>
+      <Stack marginBottom='20px'>
+        <Text fontSize='4xl'>{currentTime}</Text>
+      </Stack>
     </Box>
-  );
+      <Grid
+        templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+        gap={4}
+      >
+      <Box>
+        <Card>
+          <LinkList />
+        </Card>
+      </Box>
+      <Box>
+        <Card>
+          <DateCounter />
+        </Card>
+      </Box>
+      <Box>
+        <Card>
+          <Note />
+        </Card>
+      </Box>
+      <Box>
+        <Card>
+          <Goals />
+        </Card>
+      </Box>
+    </Grid>
+  </Box>
+);
 }
