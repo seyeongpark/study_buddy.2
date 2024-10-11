@@ -58,29 +58,27 @@ export default function Dashboard() {
               ref={provided.innerRef}
               {...provided.droppableProps}
               display="grid"
-              gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+              gridTemplateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
               gap={4}
-              minHeight= "200px"
+              minHeight= "auto"
             >
               {components.map((component, index) => (
                 <Draggable key={component.id} draggableId={component.id} index={index}>
-                {(provided, snapshot) => (
-                  <Box
-                    ref={provided.innerRef}
-                    {...provided.draggableProps} // 드래그 가능한 속성
-                    {...provided.dragHandleProps} // 드래그 핸들 속성
-                    minHeight= "200px"
-                    background={snapshot.isDragging ? "lightblue" : "lightgray"}
-                    marginBottom="8px"
-                    borderRadius="4px"
-                    boxShadow={snapshot.isDragging ? "0 4px 12px rgba(0, 0, 0, 0.2)" : "none"}
-                    {...provided.draggableProps.style}
-                  >
-                    <Card>{component.content}</Card>
-                  </Box>
-                )}
-              </Draggable>
-              
+                  {(provided, snapshot) => (
+                    <Box
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      background={snapshot.isDragging ? "lightblue" : "transparent"}
+                      marginBottom="8px"
+                      borderRadius="4px"
+                      boxShadow={snapshot.isDragging ? "0 4px 12px rgba(0, 0, 0, 0.2)" : "none"}
+                      {...provided.draggableProps.style}
+                    >
+                      <Card>{component.content}</Card>
+                    </Box>
+                  )}
+                </Draggable>
               ))}
               {provided.placeholder}
             </Box>
