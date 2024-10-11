@@ -2,7 +2,7 @@
   "name": "study_buddy",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://seyeongpark.github.io/study_buddy",
+  "homepage": "https://seyeongpark.github.io/study_buddy.2/",
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
