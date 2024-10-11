@@ -37,15 +37,9 @@ function Note() {
     }
   };
 
-  // const resetNote = () => {
-  //   // Clear the note
-  //   setText('');
-  //   localStorage.removeItem('note');
-  // };
-
   return (
     <>
-    <Card margin="0 auto" borderRadius="md">
+    <Card margin="0 auto" borderRadius="md" background="transparent">
       <CardHeader fontSize="2xl" textAlign="center">
       </CardHeader>
       <CardBody>
