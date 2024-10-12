@@ -63,7 +63,7 @@ export default function Dashboard() {
               ref={provided.innerRef}
               {...provided.droppableProps}
               display="grid"
-              gridTemplateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+              gridTemplateColumns={{ base: "1fr", md: "repeat(4, 1fr)" }}
               gap={4}
               minHeight="auto"
             >

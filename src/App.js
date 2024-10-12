@@ -5,7 +5,9 @@ import './App.css';
 import ColorPicker from './ColorPicker'; // Adjust the path if necessary
 
 function App() {
-  const [bgColor, setBgColor] = useState('#282c34'); // Default background color
+  // 로컬 스토리지에서 저장된 색상을 불러와 초기 값으로 설정
+  const storedColor = localStorage.getItem('selectedColor') || '#282c34';
+  const [bgColor, setBgColor] = useState(storedColor); // Default background color
   const [currentTime, setCurrentTime] = useState(getFormattedTime());
 
   // 시간 형식을 지정하는 함수
@@ -27,15 +29,19 @@ function App() {
   const changeBackgroundColor = (color) => {
     setBgColor(color);
     document.body.style.backgroundColor = color; // Apply the color to the body
+    localStorage.setItem('selectedColor', color); // 로컬 스토리지에 배경색 저장
   };
 
-  // useEffect for updating the current time every second
+  // useEffect for setting initial body background color and updating current time every second
   useEffect(() => {
+    // 페이지 로드 시 저장된 배경색을 적용
+    document.body.style.backgroundColor = bgColor;
+
     const interval = setInterval(() => {
       setCurrentTime(getFormattedTime());
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [bgColor]);
 
   return (
     <div className="App">

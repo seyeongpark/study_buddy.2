@@ -5,6 +5,11 @@ import chroma from 'chroma-js';
 const ColorPicker = ({ onChange }) => {
   const colors = ['#fff', '#DAD7CD', '#14213D', '#1e90ff', '#ffa500'];
 
+  const handleColorChange = (color) => {
+    localStorage.setItem('selectedColor', color); // 선택한 색상을 localStorage에 저장
+    onChange(color);
+  };
+
   return (
     <Box>
       {colors.map((color) => {
@@ -17,7 +22,7 @@ const ColorPicker = ({ onChange }) => {
             _hover={{
               backgroundColor: hoverColor,
             }}
-            onClick={() => onChange(color)}
+            onClick={() => handleColorChange(color)}
             margin="5px"
             width="40px"
             height="40px"
