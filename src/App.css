@@ -2,6 +2,12 @@
   text-align: center;
 }
 
+body {
+  margin: 0; /* Reset default margin */
+  background-color: #282c34; /* Set the background color */
+}
+
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

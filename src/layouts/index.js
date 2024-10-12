@@ -7,9 +7,7 @@ import Goals from '../components/Goals';
 import Note from '../components/Note';
 import ColorPicker from '../components/ColorPicker'; 
 
-export default function Dashboard() {
-  const [currentTime, setCurrentTime] = useState(getFormattedTime());
-  
+export default function Dashboard() {  
   // 색상 정보를 로컬 스토리지에서 불러오기
   const initialComponents = [
     { id: 'linkList', content: <LinkList />, bgColor: localStorage.getItem('linkListColor') || 'white' },
@@ -20,27 +18,6 @@ export default function Dashboard() {
   
   const [components, setComponents] = useState(initialComponents);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(getFormattedTime());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  function getFormattedTime() {
-    const options = {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hour12: true,
-    };
-    const now = new Date();
-    return now.toLocaleString('en-US', options);
-  }
-
   const handleDragEnd = (result) => {
     if (!result.destination) return;
     const newComponents = Array.from(components);
@@ -50,36 +27,35 @@ export default function Dashboard() {
   };
 
   const handleColorChange = (index, color) => {
+    // color가 유효하지 않거나 'transparent'인 경우 기본값으로 '#fff' 설정
+    const selectedColor = (color);
+  
     const newComponents = [...components];
-    newComponents[index].bgColor = color; // 색상 업데이트
+    newComponents[index].bgColor = selectedColor; // 색상 업데이트
     setComponents(newComponents);
-    
+  
     // localStorage에 색상 저장
     switch (newComponents[index].id) {
       case 'linkList':
-        localStorage.setItem('linkListColor', color);
+        localStorage.setItem('linkListColor', selectedColor);
         break;
       case 'dateCounter':
-        localStorage.setItem('dateCounterColor', color);
+        localStorage.setItem('dateCounterColor', selectedColor);
         break;
       case 'note':
-        localStorage.setItem('noteColor', color);
+        localStorage.setItem('noteColor', selectedColor);
         break;
       case 'goals':
-        localStorage.setItem('goalsColor', color);
+        localStorage.setItem('goalsColor', selectedColor);
         break;
       default:
         break;
     }
   };
+  
 
   return (
     <Box margin='40px'>
-      <Box>
-        <Stack marginBottom='20px'>
-          <Text fontSize='4xl'>{currentTime}</Text>
-        </Stack>
-      </Box>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="components">
           {(provided) => (
@@ -89,7 +65,7 @@ export default function Dashboard() {
               display="grid"
               gridTemplateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
               gap={4}
-              minHeight= "auto"
+              minHeight="auto"
             >
               {components.map((component, index) => (
                 <Draggable key={component.id} draggableId={component.id} index={index}>
@@ -104,10 +80,11 @@ export default function Dashboard() {
                       boxShadow={snapshot.isDragging ? "0 4px 12px rgba(0, 0, 0, 0.2)" : "none"}
                       {...provided.draggableProps.style}
                     >
-                      <Card background={component.bgColor}>
-                        {component.content}
-                        <ColorPicker onChange={(color) => handleColorChange(index, color)} />
-                      </Card>
+                      <Card background={component.bgColor === 'transparent' ? 'white' : component.bgColor}>
+                      {component.content}
+                      <ColorPicker onChange={(color) => handleColorChange(index, color)} />
+                    </Card>
+
                     </Box>
                   )}
                 </Draggable>

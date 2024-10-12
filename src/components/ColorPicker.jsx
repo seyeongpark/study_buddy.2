@@ -20,11 +20,11 @@ const ColorPicker = ({ onChange }) => {
         <Text mb={2}>Select a background color:</Text>
         <Box>
           <Button
-            onClick={() => onChange('transparent')}
+            onClick={() => onChange('white')}
             borderRadius="50%"
             width="30px"
             height="30px"
-            backgroundColor="transparent"
+            backgroundColor="white"
             border="1px solid #000"
             mr={2}
           />
