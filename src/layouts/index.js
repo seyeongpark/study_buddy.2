@@ -1,41 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Stack, Text, Input, Box, Flex, Card } from '@chakra-ui/react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import React, { useState } from 'react';
+import { Box, Card } from '@chakra-ui/react';
 import LinkList from '../components/LinkList';
 import DateCounter from '../components/DateCounter';
 import Goals from '../components/Goals';
 import Note from '../components/Note';
-import ColorPicker from '../components/ColorPicker'; 
+import ColorPicker from '../components/ColorPicker';
 
-export default function Dashboard() {  
-  // 색상 정보를 로컬 스토리지에서 불러오기
+export default function Dashboard() {
+
+  // 초기 컴포넌트 + 색상 로드
   const initialComponents = [
-    { id: 'linkList', content: <LinkList />, bgColor: localStorage.getItem('linkListColor') || 'white' },
+    // { id: 'linkList', content: <LinkList />, bgColor: localStorage.getItem('linkListColor') || 'white'},
     { id: 'dateCounter', content: <DateCounter />, bgColor: localStorage.getItem('dateCounterColor') || 'white' },
-    { id: 'note', content: <Note />, bgColor: localStorage.getItem('noteColor') || 'white' },
+    // { id: 'note', content: <Note />, bgColor: localStorage.getItem('noteColor') || 'white' },
     { id: 'goals', content: <Goals />, bgColor: localStorage.getItem('goalsColor') || 'white' },
   ];
-  
+
   const [components, setComponents] = useState(initialComponents);
 
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-    const newComponents = Array.from(components);
-    const [movedItem] = newComponents.splice(result.source.index, 1);
-    newComponents.splice(result.destination.index, 0, movedItem);
-    setComponents(newComponents);
-  };
-
+  // 색상 변경 처리
   const handleColorChange = (index, color) => {
-    // color가 유효하지 않거나 'transparent'인 경우 기본값으로 '#fff' 설정
-    const selectedColor = (color);
-  
-    const newComponents = [...components];
-    newComponents[index].bgColor = selectedColor; // 색상 업데이트
-    setComponents(newComponents);
-  
-    // localStorage에 색상 저장
-    switch (newComponents[index].id) {
+    const selectedColor = color;
+    const updated = [...components];
+    updated[index].bgColor = selectedColor;
+    setComponents(updated);
+
+    // localStorage 저장
+    switch (updated[index].id) {
       case 'linkList':
         localStorage.setItem('linkListColor', selectedColor);
         break;
@@ -52,48 +43,48 @@ export default function Dashboard() {
         break;
     }
   };
-  
 
   return (
-    <Box margin='40px'>
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="components">
-          {(provided) => (
-            <Box
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              display="grid"
-              gridTemplateColumns={{ base: "1fr", md: "repeat(4, 1fr)" }}
-              gap={4}
-              minHeight="auto"
-            >
-              {components.map((component, index) => (
-                <Draggable key={component.id} draggableId={component.id} index={index}>
-                  {(provided, snapshot) => (
-                    <Box
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      background={snapshot.isDragging ? "lightblue" : "transparent"}
-                      marginBottom="8px"
-                      borderRadius="4px"
-                      boxShadow={snapshot.isDragging ? "0 4px 12px rgba(0, 0, 0, 0.2)" : "none"}
-                      {...provided.draggableProps.style}
-                    >
-                      <Card background={component.bgColor === 'transparent' ? 'white' : component.bgColor}>
-                      {component.content}
-                      <ColorPicker onChange={(color) => handleColorChange(index, color)} />
-                    </Card>
+    <Box margin="40px">
+      <Box
+        display="grid"
+        gridTemplateColumns={{ base: "1fr", md: "3fr 2fr 2fr" }}
+        gap={4}
+      >
 
-                    </Box>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </Box>
-          )}
-        </Droppable>
-      </DragDropContext>
+        {/* 왼쪽 */}
+        <Card
+          background={'white'}
+          padding="10px"
+        >
+           <LinkList />
+        </Card>
+
+        {/* 오른쪽 */}
+        <Card
+            background={'transparent'}
+            padding="10px"
+          >
+            {components.map((component, index) => (
+          <Card
+            key={component.id}
+            background={component.bgColor === 'transparent' ? 'white' : component.bgColor}
+            padding="10px" marginBottom="20px"
+          >
+            {component.content}
+            <ColorPicker onChange={(color) => handleColorChange(index, color)} />
+          </Card>
+        ))}
+          </Card>
+
+        <Card
+          background={'white'}
+          padding="10px"
+        >
+           <Note />
+        </Card>
+      </Box>
+      
     </Box>
   );
 }
