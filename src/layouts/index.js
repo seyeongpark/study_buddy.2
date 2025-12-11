@@ -1,90 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Card } from '@chakra-ui/react';
+
 import LinkList from '../components/LinkList';
 import DateCounter from '../components/DateCounter';
 import Goals from '../components/Goals';
 import Note from '../components/Note';
 import ColorPicker from '../components/ColorPicker';
+import CustomColorManager from '../components/CustomColorManager';
 
 export default function Dashboard() {
 
-  // 초기 컴포넌트 + 색상 로드
-  const initialComponents = [
-    // { id: 'linkList', content: <LinkList />, bgColor: localStorage.getItem('linkListColor') || 'white'},
-    { id: 'dateCounter', content: <DateCounter />, bgColor: localStorage.getItem('dateCounterColor') || 'white' },
-    // { id: 'note', content: <Note />, bgColor: localStorage.getItem('noteColor') || 'white' },
-    { id: 'goals', content: <Goals />, bgColor: localStorage.getItem('goalsColor') || 'white' },
-  ];
+  // bgColor 통합 관리
+  const [bgColors, setBgColors] = useState({
+    linkList: localStorage.getItem('linkListColor') || 'white',
+    note: localStorage.getItem('noteColor') || 'white',
+    dateCounter: localStorage.getItem('dateCounterColor') || 'white',
+    goals: localStorage.getItem('goalsColor') || 'white',
+  });
 
-  const [components, setComponents] = useState(initialComponents);
+  // 사용자 색상 목록
+  const [customColors, setCustomColors] = useState(
+    JSON.parse(localStorage.getItem("customColors")) || []
+  );
 
-  // 색상 변경 처리
-  const handleColorChange = (index, color) => {
-    const selectedColor = color;
-    const updated = [...components];
-    updated[index].bgColor = selectedColor;
-    setComponents(updated);
-
-    // localStorage 저장
-    switch (updated[index].id) {
-      case 'linkList':
-        localStorage.setItem('linkListColor', selectedColor);
-        break;
-      case 'dateCounter':
-        localStorage.setItem('dateCounterColor', selectedColor);
-        break;
-      case 'note':
-        localStorage.setItem('noteColor', selectedColor);
-        break;
-      case 'goals':
-        localStorage.setItem('goalsColor', selectedColor);
-        break;
-      default:
-        break;
-    }
+  // CustomColorManager → Dashboard 로 색 업데이트
+  const handleSaveCustomColors = (colors) => {
+    setCustomColors(colors);
   };
+
+  // bgColor 변경 처리
+  const setBgColor = (title, color) => {
+    setBgColors(prev => ({
+      ...prev,
+      [title]: color
+    }));
+    localStorage.setItem(`${title}Color`, color);
+  };
+
+  const components = [
+    { id: 'dateCounter', content: <DateCounter /> },
+    { id: 'goals', content: <Goals /> },
+  ];
 
   return (
     <Box margin="40px">
+
       <Box
         display="grid"
         gridTemplateColumns={{ base: "1fr", md: "3fr 2fr 2fr" }}
         gap={4}
       >
 
-        {/* 왼쪽 */}
-        <Card
-          background={'white'}
-          padding="10px"
-        >
-           <LinkList />
+        {/* LEFT */}
+        <Card background={bgColors.linkList} padding="10px">
+          <LinkList />
+          <ColorPicker
+            onChange={(color) => setBgColor('linkList', color)}
+            customColors={customColors}
+          />
         </Card>
 
-        {/* 오른쪽 */}
-        <Card
-            background={'transparent'}
-            padding="10px"
-          >
-            {components.map((component, index) => (
-          <Card
-            key={component.id}
-            background={component.bgColor === 'transparent' ? 'white' : component.bgColor}
-            padding="10px" marginBottom="20px"
-          >
-            {component.content}
-            <ColorPicker onChange={(color) => handleColorChange(index, color)} />
-          </Card>
-        ))}
-          </Card>
+        {/* CENTER */}
+        <Card background={'transparent'} padding="10px">
+          {components.map((component) => (
+            <Card
+              key={component.id}
+              background={bgColors[component.id]}
+              padding="10px"
+              marginBottom="20px"
+            >
+              {component.content}
 
-        <Card
-          background={'white'}
-          padding="10px"
-        >
-           <Note />
+              <ColorPicker
+                onChange={(color) => setBgColor(component.id, color)}
+                customColors={customColors}
+              />
+            </Card>
+          ))}
         </Card>
+
+        {/* RIGHT */}
+        <Card background={bgColors.note} padding="10px">
+          <Note />
+          <ColorPicker
+            onChange={(color) => setBgColor('note', color)}
+            customColors={customColors}
+          />
+        </Card>
+
       </Box>
-      
+
+      {/* 우측 슬라이드 */}
+      <CustomColorManager onSaveCustomColors={handleSaveCustomColors} />
+
     </Box>
   );
 }

@@ -49,7 +49,7 @@ function Note() {
           onKeyDown={handleKeyDown}
           placeholder="Let's start your dream..."
           size="sm"
-          minHeight="200px"
+          minHeight="300px"
           resize="none"
           fontSize="lg"
         />
